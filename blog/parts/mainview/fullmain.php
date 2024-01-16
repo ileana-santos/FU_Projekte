@@ -1,7 +1,7 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-8">
-
+<!-- Featured Artikel -->
             <div class="card">
                 <a href="article.html"><img class="card-img-top" src="assets/img/850x350.jpg" alt="..." /></a>
                 <div class="card-body">
