@@ -1,7 +1,7 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-8">
-<!-- Featured Artikel -->
+            <!-- Featured Artikel -->
             <div class="card">
                 <a href="article.html"><img class="card-img-top" src="assets/img/850x350.jpg" alt="..." /></a>
                 <div class="card-body">
@@ -23,7 +23,7 @@
                             <a class="btn btn-primary" href="article.html">Weiter →</a>
                         </div>
                     </div>
-                    <!-- Blog post-->
+
                     <div class="card">
                         <a href="article.html"><img class="card-img-top" src="assets/img/700x350.jpg" alt="..." /></a>
                         <div class="card-body">
@@ -35,7 +35,6 @@
                     </div>
                 </div>
                 <div class="col-6">
-                    <!-- Blog post-->
                     <div class="card mb-4">
                         <a href="article.html"><img class="card-img-top" src="assets/img/700x350.jpg" alt="..." /></a>
                         <div class="card-body">
@@ -45,7 +44,6 @@
                             <a class="btn btn-primary" href="article.html">Weiter →</a>
                         </div>
                     </div>
-                    <!-- Blog post-->
                     <div class="card mb-4">
                         <a href="article.html"><img class="card-img-top" src="assets/img/700x350.jpg" alt="..." /></a>
                         <div class="card-body">

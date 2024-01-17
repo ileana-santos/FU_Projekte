@@ -1,4 +1,3 @@
-<div class="col-4">
 <div class="card mb-4">
     <div class="card-header">Kategorien</div>
     <div class="card-body">
@@ -17,5 +16,4 @@
             </div>
         </div>
     </div>
-</div>
 </div>
