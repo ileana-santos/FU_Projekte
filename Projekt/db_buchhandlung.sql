@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 09, 2024 at 12:35 PM
+-- Generation Time: Feb 12, 2024 at 02:16 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -47,19 +47,9 @@ CREATE TABLE `angestellte` (
   `Vorname` varchar(100) DEFAULT NULL,
   `Nachname` varchar(100) DEFAULT NULL,
   `Abteilung` varchar(100) DEFAULT NULL,
-  `Position` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `angestellt_konto`
---
-
-CREATE TABLE `angestellt_konto` (
-  `Angestellte_id` varchar(100) DEFAULT NULL,
-  `Benutzername` varchar(100) DEFAULT NULL,
-  `Password` varchar(100) DEFAULT NULL
+  `Position` varchar(100) DEFAULT NULL,
+  `konto_id` int(11) DEFAULT NULL,
+  `typ_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -87,6 +77,17 @@ CREATE TABLE `autor` (
   `autor_id` int(11) NOT NULL,
   `nachname` varchar(255) DEFAULT NULL,
   `vorname` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `autor_img`
+--
+
+CREATE TABLE `autor_img` (
+  `autor_id` int(11) DEFAULT NULL,
+  `img_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -131,6 +132,17 @@ CREATE TABLE `bezahlungsmethoden` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `buch_img`
+--
+
+CREATE TABLE `buch_img` (
+  `buch_id` int(11) DEFAULT NULL,
+  `img_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `bücher`
 --
 
@@ -141,7 +153,8 @@ CREATE TABLE `bücher` (
   `sprache_id` int(11) DEFAULT NULL,
   `kategorie_id` int(11) DEFAULT NULL,
   `preis` double NOT NULL,
-  `verlag_id` int(11) DEFAULT NULL
+  `verlag_id` int(11) DEFAULT NULL,
+  `ISBN` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -161,12 +174,38 @@ CREATE TABLE `gutscheine` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `images`
+--
+
+CREATE TABLE `images` (
+  `img_id` int(11) NOT NULL,
+  `url` varchar(100) DEFAULT NULL,
+  `beschreibung` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `kategorie`
 --
 
 CREATE TABLE `kategorie` (
   `kategorie_id` int(11) NOT NULL,
   `kategorie_name` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `konten`
+--
+
+CREATE TABLE `konten` (
+  `passwort_hash` varchar(100) DEFAULT NULL,
+  `erstellt_datum` timestamp NULL DEFAULT NULL,
+  `last_datum` timestamp NULL DEFAULT NULL,
+  `konto_id` int(11) NOT NULL,
+  `benutzname` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -179,19 +218,9 @@ CREATE TABLE `kunden` (
   `kunden_id` int(11) NOT NULL,
   `kunden_name` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
-  `telefonnummer` varchar(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `kundenkonto`
---
-
-CREATE TABLE `kundenkonto` (
-  `kunden_id` int(11) DEFAULT NULL,
-  `benutzername` varchar(100) DEFAULT NULL,
-  `Password` varchar(100) DEFAULT NULL
+  `telefonnummer` varchar(20) DEFAULT NULL,
+  `typ_id` int(11) DEFAULT NULL,
+  `konto_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -302,6 +331,17 @@ CREATE TABLE `sprache` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `typen_konten`
+--
+
+CREATE TABLE `typen_konten` (
+  `typ_id` int(11) NOT NULL,
+  `typ_name` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `unternehmen`
 --
 
@@ -311,19 +351,9 @@ CREATE TABLE `unternehmen` (
   `kontaktperson` varchar(255) DEFAULT NULL,
   `kontakt_email` varchar(255) DEFAULT NULL,
   `kontakt_telefon` varchar(20) DEFAULT NULL,
-  `adressen_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `unternehmenkonto`
---
-
-CREATE TABLE `unternehmenkonto` (
-  `unternehmen_id` int(11) DEFAULT NULL,
-  `benutzername` varchar(100) DEFAULT NULL,
-  `Password` varchar(100) DEFAULT NULL
+  `adressen_id` int(11) DEFAULT NULL,
+  `typ_id` int(11) DEFAULT NULL,
+  `konto_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -349,9 +379,12 @@ CREATE TABLE `verlag_kontakt` (
   `kontakt_id` int(11) NOT NULL,
   `verlag_id` int(11) DEFAULT NULL,
   `Email` varchar(100) DEFAULT NULL,
-  `Adresse` varchar(255) DEFAULT NULL,
   `Telefonnummer` varchar(20) DEFAULT NULL,
-  `Ansprechpartner_id` int(11) DEFAULT NULL
+  `Ansprechpartner_id` int(11) DEFAULT NULL,
+  `Straße` varchar(100) DEFAULT NULL,
+  `PLZ` int(11) DEFAULT NULL,
+  `Land` varchar(100) DEFAULT NULL,
+  `adresszeile` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -385,13 +418,9 @@ ALTER TABLE `adressen`
 -- Indexes for table `angestellte`
 --
 ALTER TABLE `angestellte`
-  ADD PRIMARY KEY (`Angestellte_id`);
-
---
--- Indexes for table `angestellt_konto`
---
-ALTER TABLE `angestellt_konto`
-  ADD KEY `Angestellt_konto_angestellte_FK` (`Angestellte_id`);
+  ADD PRIMARY KEY (`Angestellte_id`),
+  ADD KEY `angestellte_konten_FK` (`konto_id`),
+  ADD KEY `angestellte_typen_konten_FK` (`typ_id`);
 
 --
 -- Indexes for table `ansprechpartner`
@@ -405,6 +434,13 @@ ALTER TABLE `ansprechpartner`
 --
 ALTER TABLE `autor`
   ADD PRIMARY KEY (`autor_id`);
+
+--
+-- Indexes for table `autor_img`
+--
+ALTER TABLE `autor_img`
+  ADD KEY `autor__autor_FK` (`autor_id`),
+  ADD KEY `autor__images_FK` (`img_id`);
 
 --
 -- Indexes for table `bestellungen`
@@ -430,10 +466,18 @@ ALTER TABLE `bezahlungsmethoden`
   ADD PRIMARY KEY (`zahlungsmethode_id`);
 
 --
+-- Indexes for table `buch_img`
+--
+ALTER TABLE `buch_img`
+  ADD KEY `buch_img_bücher_FK` (`buch_id`),
+  ADD KEY `buch_img_images_FK` (`img_id`);
+
+--
 -- Indexes for table `bücher`
 --
 ALTER TABLE `bücher`
   ADD PRIMARY KEY (`buch_id`),
+  ADD UNIQUE KEY `bücher_unique` (`ISBN`),
   ADD KEY `autor_id` (`autor_id`),
   ADD KEY `sprache_id` (`sprache_id`),
   ADD KEY `kategorie_id` (`kategorie_id`),
@@ -447,22 +491,30 @@ ALTER TABLE `gutscheine`
   ADD KEY `gutscheine_kunden_FK` (`kunden_id`);
 
 --
+-- Indexes for table `images`
+--
+ALTER TABLE `images`
+  ADD PRIMARY KEY (`img_id`);
+
+--
 -- Indexes for table `kategorie`
 --
 ALTER TABLE `kategorie`
   ADD PRIMARY KEY (`kategorie_id`);
 
 --
+-- Indexes for table `konten`
+--
+ALTER TABLE `konten`
+  ADD PRIMARY KEY (`konto_id`);
+
+--
 -- Indexes for table `kunden`
 --
 ALTER TABLE `kunden`
-  ADD PRIMARY KEY (`kunden_id`);
-
---
--- Indexes for table `kundenkonto`
---
-ALTER TABLE `kundenkonto`
-  ADD KEY `Kundenkonto_kunden_FK` (`kunden_id`);
+  ADD PRIMARY KEY (`kunden_id`),
+  ADD KEY `kunden_typen_konten_FK` (`typ_id`),
+  ADD KEY `kunden_konten_FK` (`konto_id`);
 
 --
 -- Indexes for table `lieferadressen`
@@ -520,17 +572,19 @@ ALTER TABLE `sprache`
   ADD PRIMARY KEY (`sprache_id`);
 
 --
+-- Indexes for table `typen_konten`
+--
+ALTER TABLE `typen_konten`
+  ADD PRIMARY KEY (`typ_id`);
+
+--
 -- Indexes for table `unternehmen`
 --
 ALTER TABLE `unternehmen`
   ADD PRIMARY KEY (`unternehmen_id`),
-  ADD KEY `adressen_id` (`adressen_id`);
-
---
--- Indexes for table `unternehmenkonto`
---
-ALTER TABLE `unternehmenkonto`
-  ADD KEY `Unternehmenkonto_unternehmen_FK` (`unternehmen_id`);
+  ADD KEY `adressen_id` (`adressen_id`),
+  ADD KEY `unternehmen_typen_konten_FK` (`typ_id`),
+  ADD KEY `unternehmen_konten_FK` (`konto_id`);
 
 --
 -- Indexes for table `verlag`
@@ -560,16 +614,18 @@ ALTER TABLE `warenkorb`
 --
 
 --
--- Constraints for table `angestellt_konto`
+-- Constraints for table `angestellte`
 --
-ALTER TABLE `angestellt_konto`
-  ADD CONSTRAINT `Angestellt_konto_angestellte_FK` FOREIGN KEY (`Angestellte_id`) REFERENCES `angestellte` (`Angestellte_id`);
+ALTER TABLE `angestellte`
+  ADD CONSTRAINT `angestellte_konten_FK` FOREIGN KEY (`konto_id`) REFERENCES `konten` (`konto_id`),
+  ADD CONSTRAINT `angestellte_typen_konten_FK` FOREIGN KEY (`typ_id`) REFERENCES `typen_konten` (`typ_id`);
 
 --
--- Constraints for table `ansprechpartner`
+-- Constraints for table `autor_img`
 --
-ALTER TABLE `ansprechpartner`
-  ADD CONSTRAINT `Ansprechpartner_verlag_FK` FOREIGN KEY (`Verlag_id`) REFERENCES `verlag` (`verlag_id`);
+ALTER TABLE `autor_img`
+  ADD CONSTRAINT `autor__autor_FK` FOREIGN KEY (`autor_id`) REFERENCES `autor` (`autor_id`),
+  ADD CONSTRAINT `autor__images_FK` FOREIGN KEY (`img_id`) REFERENCES `images` (`img_id`);
 
 --
 -- Constraints for table `bestellungen`
@@ -587,6 +643,13 @@ ALTER TABLE `bestellungsstatus`
   ADD CONSTRAINT `bestellungsstatus_ibfk_1` FOREIGN KEY (`bestell_id`) REFERENCES `bestellungen` (`bestell_id`);
 
 --
+-- Constraints for table `buch_img`
+--
+ALTER TABLE `buch_img`
+  ADD CONSTRAINT `buch_img_bücher_FK` FOREIGN KEY (`buch_id`) REFERENCES `bücher` (`buch_id`),
+  ADD CONSTRAINT `buch_img_images_FK` FOREIGN KEY (`img_id`) REFERENCES `images` (`img_id`);
+
+--
 -- Constraints for table `bücher`
 --
 ALTER TABLE `bücher`
@@ -602,10 +665,11 @@ ALTER TABLE `gutscheine`
   ADD CONSTRAINT `gutscheine_kunden_FK` FOREIGN KEY (`kunden_id`) REFERENCES `kunden` (`kunden_id`);
 
 --
--- Constraints for table `kundenkonto`
+-- Constraints for table `kunden`
 --
-ALTER TABLE `kundenkonto`
-  ADD CONSTRAINT `Kundenkonto_kunden_FK` FOREIGN KEY (`kunden_id`) REFERENCES `kunden` (`kunden_id`);
+ALTER TABLE `kunden`
+  ADD CONSTRAINT `kunden_konten_FK` FOREIGN KEY (`konto_id`) REFERENCES `konten` (`konto_id`),
+  ADD CONSTRAINT `kunden_typen_konten_FK` FOREIGN KEY (`typ_id`) REFERENCES `typen_konten` (`typ_id`);
 
 --
 -- Constraints for table `lieferadressen`
@@ -643,13 +707,9 @@ ALTER TABLE `rechnung_adressen`
 -- Constraints for table `unternehmen`
 --
 ALTER TABLE `unternehmen`
-  ADD CONSTRAINT `unternehmen_ibfk_1` FOREIGN KEY (`adressen_id`) REFERENCES `adressen` (`adressen_id`);
-
---
--- Constraints for table `unternehmenkonto`
---
-ALTER TABLE `unternehmenkonto`
-  ADD CONSTRAINT `Unternehmenkonto_unternehmen_FK` FOREIGN KEY (`unternehmen_id`) REFERENCES `unternehmen` (`unternehmen_id`);
+  ADD CONSTRAINT `unternehmen_ibfk_1` FOREIGN KEY (`adressen_id`) REFERENCES `adressen` (`adressen_id`),
+  ADD CONSTRAINT `unternehmen_konten_FK` FOREIGN KEY (`konto_id`) REFERENCES `konten` (`konto_id`),
+  ADD CONSTRAINT `unternehmen_typen_konten_FK` FOREIGN KEY (`typ_id`) REFERENCES `typen_konten` (`typ_id`);
 
 --
 -- Constraints for table `verlag_kontakt`
